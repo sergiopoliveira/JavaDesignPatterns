@@ -36,7 +36,7 @@ class OldFashionedPrinter implements Machine {
 
     @Override
     public void fax(Document d) {
-        throw new Exception();
+       // throw new Exception();
     }
 
     @Override
