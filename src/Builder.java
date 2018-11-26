@@ -89,7 +89,7 @@ class Builder {
          StringBuilder sb = new StringBuilder();
          // fluent interface
          sb.append("foo").append("bar");
-         
+
          HtmlBuilder builder = new HtmlBuilder("ul");
          builder.addChild("li", "hello")
                  .addChild("li", "world");
