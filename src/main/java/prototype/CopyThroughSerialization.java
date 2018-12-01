@@ -1,3 +1,4 @@
+package prototype;
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -15,7 +16,7 @@ class Foo implements Serializable {
 
     @Override
     public String toString() {
-        return "Foo{" +
+        return "prototype.Foo{" +
                 "stuff=" + stuff +
                 ", whatever='" + whatever + '\'' +
                 '}';
