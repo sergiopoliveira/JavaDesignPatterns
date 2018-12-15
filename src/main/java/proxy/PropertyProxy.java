@@ -18,7 +18,7 @@ class Property<T> {
 
         this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
