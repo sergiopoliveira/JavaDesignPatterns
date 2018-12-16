@@ -1,5 +1,6 @@
 package command;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +14,13 @@ class BankAccount {
 
     }
 
-    public void withdraw(int amount) {
+    public boolean withdraw(int amount) {
         if (balance - amount >= overdraftLimit) {
             balance -= amount;
             System.out.println("withdrew " + amount + ", balance is now" + balance);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -30,10 +33,13 @@ class BankAccount {
 
 interface Command {
     void call();
+
+    void undo();
 }
 
 class BankAccountCommand implements Command {
     private BankAccount account;
+    private boolean succeeded;
 
     public enum Action {
         DEPOSIT, WITHDRAW
@@ -53,15 +59,30 @@ class BankAccountCommand implements Command {
         switch (action) {
 
             case DEPOSIT:
+                succeeded = true;
                 account.deposit(amount);
                 break;
             case WITHDRAW:
+                succeeded = account.withdraw(amount);
+                break;
+        }
+    }
+
+    @Override
+    public void undo() {
+        if (!succeeded) {
+            return;
+        }
+        switch (action) {
+            case DEPOSIT:
                 account.withdraw(amount);
+                break;
+            case WITHDRAW:
+                account.deposit(amount);
                 break;
         }
     }
 }
-
 
 public class CommandDemo {
 
@@ -73,9 +94,14 @@ public class CommandDemo {
         commands.add(new BankAccountCommand(ba, BankAccountCommand.Action.DEPOSIT, 100));
         commands.add(new BankAccountCommand(ba, BankAccountCommand.Action.WITHDRAW, 1000));
 
-            for(BankAccountCommand c : commands) {
-                c.call();
-                System.out.println(ba);
-            }
+        for (BankAccountCommand c : commands) {
+            c.call();
+            System.out.println(ba);
+        }
+
+//            for(Command c : Lists.reverse(commands){
+//                c.undo();
+//                System.out.println(ba);
+//            }
     }
 }
