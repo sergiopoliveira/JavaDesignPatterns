@@ -115,7 +115,7 @@ public class TreeTraversal {
         System.out.println();
 
         BinaryTree<Integer> tree = new BinaryTree<>(root);
-        for(int n : tree) {
+        for (int n : tree) {
             System.out.println("" + n + ",");
         }
     }
