@@ -1,5 +1,7 @@
 package nullobject;
 
+import java.lang.reflect.Proxy;
+
 interface Log {
 
     void info(String msg);
@@ -49,11 +51,31 @@ final class NullLog implements Log {
 
 public class NullObjectDemo {
 
-    public static void main(String[] args) {
-        Log log = new NullLog();
-        BankAccount account = new BankAccount(log);
+    // Dynamic Null Object
+    @SuppressWarnings("unchecked")
+    public static <T> T noOp(Class<T> itf) {
+        return (T) Proxy.newProxyInstance(
+                itf.getClassLoader(),
+                new Class<?>[]{itf},
+                (proxy, method, args) ->
+                {
+                    if (method.getReturnType().equals(Void.TYPE)) {
+                        return null;
+                    } else {
+                        return method.getReturnType().getConstructor().newInstance();
+                    }
+                }
+        );
+    }
 
-        account.deposit(100);
+    public static void main(String[] args) {
+        //ConsoleLog log = new ConsoleLog();
+        // Log log = new NullLog();
+
+        Log log = noOp(Log.class);
+        BankAccount ba = new BankAccount(log);
+
+        ba.deposit(100);
     }
 
 }
